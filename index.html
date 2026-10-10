@@ -4,12 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>每日计算·天天练（北师大版）</title>
+<meta name="description" content="按北师大版教材进度出题，小一～初二课内计算天天练，免费、无需登录、数据存在本机。">
+<meta name="theme-color" content="#FF6A3D">
+<meta property="og:title" content="每日计算·天天练（北师大版）">
+<meta property="og:description" content="按北师大版教材进度出题，小一～初二课内计算天天练，免费、无需登录。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://scverygood.github.io/jisuan/">
+<meta property="og:image" content="https://scverygood.github.io/jisuan/cover.jpg">
+<meta property="og:image:secure_url" content="https://scverygood.github.io/jisuan/cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="742">
+<meta property="og:image:alt" content="每日计算·天天练（北师大版）">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://scverygood.github.io/jisuan/cover.jpg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23FF6A3D'/><text x='32' y='44' font-size='34' text-anchor='middle' fill='white' font-family='sans-serif'>算</text></svg>">
+<link rel="manifest" href='data:application/manifest+json,{"name":"每日计算·天天练（北师大版）","short_name":"每日计算","display":"standalone","background_color":"%23FFF8F1","theme_color":"%23FF6A3D"}'>
 <style>
 :root{--main:#FF6A3D;--main2:#F5392F;--bg:#FFF8F1;--card:#fff;--ink:#2B2320;--sub:#8A7A72;--line:#F3E3D7;--ok:#16A34A;--bad:#E5484D;--soft:#FFF1E8}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
-#app{max-width:780px;margin:0 auto;padding:0 14px 40px}
+#app{max-width:780px;margin:0 auto;padding:0 14px calc(40px + env(safe-area-inset-bottom))}
 header.top{margin:0 -14px 14px;padding:26px 20px 22px;background:linear-gradient(135deg,#FF8A4C 0%,#F5392F 100%);color:#fff;border-radius:0 0 24px 24px;display:flex;justify-content:space-between;align-items:center}
 .brand{font-size:22px;font-weight:800;letter-spacing:.5px}
 .brand .sub{display:block;font-size:12px;font-weight:400;opacity:.92;margin-top:3px;letter-spacing:0}
@@ -123,6 +138,15 @@ h2.scr-title{font-size:20px;font-weight:800;margin:2px 4px 4px}
  .pans{font-size:10.5pt;color:#333}
  .mark-row{display:none}
 }
+#scr-practice #btn-submit{position:fixed;left:14px;right:14px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:20;box-shadow:0 6px 22px rgba(255,90,40,.20)}
+#scr-practice #q-list{padding-bottom:84px}
+.ab-list{font-size:14px;font-weight:700;margin:6px 0;color:var(--ink)}
+.ab-list .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--main);margin-right:8px;vertical-align:middle}
+.rp-bar-wrap{display:flex;align-items:flex-end;height:112px;gap:2px}
+.rp-bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.rp-bar .col{width:72%;background:var(--main);border-radius:6px 6px 0 0;transition:height .3s}
+.rp-bar .col.zero{background:#F0E2D8}
+.rp-bar .d{font-size:9px;color:var(--sub);white-space:nowrap}
 </style>
 </head>
 <body>
@@ -147,6 +171,12 @@ h2.scr-title{font-size:20px;font-weight:800;margin:2px 4px 4px}
   <div class="grade-grid" id="grid-jun"></div>
   <div style="height:14px"></div>
   <button class="wrong-entry" onclick="goWrong()">📒 错题本 <span>待消灭 <b id="wrong-n">0</b> 题 ›</span></button>
+  <div class="toolbar no-print">
+    <button class="btn sm ghost" onclick="exportData()">⬇️ 导出备份</button>
+    <button class="btn sm ghost" onclick="importData()">⬆️ 导入备份</button>
+    <button class="btn sm ghost" onclick="goReport()">📊 家长周报</button>
+    <button class="btn sm ghost" onclick="goAbout()">ℹ️ 关于</button>
+  </div>
   <p class="note">题库依据北师大版数学教材计算单元范围生成，不超前。一、二、三年级与初一、初二按 2024/2025 年新教材进度编排（如新版一上只练到 10 以内加减，20 以内进位加法在一下）；四至六年级按现行教材进度。个别单元顺序以孩子实际教材为准。数据仅保存在本机浏览器。</p>
 </section>
 
@@ -209,17 +239,30 @@ h2.scr-title{font-size:20px;font-weight:800;margin:2px 4px 4px}
   <h2 class="scr-title">📒 错题本</h2>
   <p class="scr-sub">重练时答对自动移出；答错累计错次</p>
   <div class="filter-bar" id="w-filter"></div>
+  <div class="toolbar no-print"><button class="btn sm ghost" onclick="window.print()">🖨️ 打印当前错题</button></div>
   <div id="w-list"></div>
   <div style="height:10px"></div>
   <button class="btn blk" id="btn-redo-all" onclick="redoAllWrong()">🔁 重练当前筛选全部错题</button>
 </section>
 
+<section id="scr-report" hidden>
+  <span class="nav-back no-print" onclick="goHome()">‹ 返回</span>
+  <h2 class="scr-title">📊 家长周报</h2>
+  <p class="scr-sub">基于本机练习记录（近 14 天）</p>
+  <div id="rp-body"></div>
+</section>
+<section id="scr-about" hidden>
+  <span class="nav-back no-print" onclick="goHome()">‹ 返回</span>
+  <h2 class="scr-title">ℹ️ 关于</h2>
+  <div class="card" id="ab-body"></div>
+</section>
 </main>
 </div>
 <script>
 'use strict';
 /* ============ 基础工具 ============ */
 const $=id=>document.getElementById(id);
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const P=a=>a[R(0,a.length-1)];
 const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){const t=b;b=a%b;a=t}return a||1};
@@ -382,19 +425,19 @@ const gname=k=>{const g=GRADES.find(x=>x.key===k);return g?g.n:k};
 
 /* ============ 数据存取 ============ */
 const LS='daily_math_bnu_v1';
-let S={hist:[],wrong:[],streak:{last:'',n:0},last:null,cfg:{n:8,mode:'online'}};
+let S={hist:[],wrong:[],streak:{last:'',n:0},last:null,cfg:{n:8,mode:'online',instant:false,sound:true}};
 function load(){try{const raw=localStorage.getItem(LS);if(raw)S=Object.assign(S,JSON.parse(raw))}catch(e){console.warn(e)}}
 function save(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){toast('本地存储失败')}}
 
 /* ============ 屏幕切换 ============ */
-const SCREENS=['scr-home','scr-topics','scr-practice','scr-paper','scr-wrong'];
+const SCREENS=['scr-home','scr-topics','scr-practice','scr-paper','scr-wrong','scr-report','scr-about'];
 function show(id){SCREENS.forEach(s=>$(s).hidden=(s!==id));window.scrollTo(0,0)}
 function goHome(){stopTimer();renderHome();show('scr-home')}
 function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
 
 /* ============ 首页 ============ */
 function renderHome(){
- const today=new Date().toISOString().slice(0,10);
+ const today=todayStr();
  const th=S.hist.filter(h=>h.d.slice(0,10)===today);
  $('st-today').textContent=th.reduce((s,h)=>s+h.n,0);
  const tn=th.reduce((s,h)=>s+h.c,0),tt=th.reduce((s,h)=>s+h.n,0);
@@ -438,7 +481,7 @@ function toggleTopic(i){
 function renderPills(){
  const counts=[5,6,8];
  $('pill-count').innerHTML=counts.map(c=>'<button class="pill'+(S.cfg.n===c?' on':'')+'" onclick="setCfg(\'n\','+c+')">'+c+' 题</button>').join('');
- $('pill-mode').innerHTML='<button class="pill'+(S.cfg.mode==='online'?' on':'')+'" onclick="setCfg(\'mode\',\'online\')">📱 在线作答</button><button class="pill'+(S.cfg.mode==='paper'?' on':'')+'" onclick="setCfg(\'mode\',\'paper\')">🖨️ 纸质打印</button>';
+ $('pill-mode').innerHTML='<button class="pill'+(S.cfg.mode==='online'?' on':'')+'" onclick="setCfg(\'mode\',\'online\')">📱 在线作答</button><button class="pill'+(S.cfg.mode==='paper'?' on':'')+'" onclick="setCfg(\'mode\',\'paper\')">🖨️ 纸质打印</button><button class="pill'+(S.cfg.instant?' on':'')+'" onclick="setCfg(\'instant\',!S.cfg.instant)">⚡ 做完即判</button><button class="pill'+(S.cfg.sound?' on':'')+'" onclick="setCfg(\'sound\',!S.cfg.sound)">🔊 音效</button>';
 }
 function setCfg(k,v){S.cfg[k]=v;save();renderPills()}
 
@@ -483,9 +526,10 @@ function renderPractice(){
  $('result-panel').hidden=true;$('btn-submit').hidden=false;
  $('q-list').innerHTML=SS.qs.map((q,i)=>{
   const im=q.t==='num'||q.t==='pct'?' inputmode="decimal"':'';
-  const keys=q.k?'<div class="qkeys">'+q.k.map(k=>'<button onclick="insKey(this,\''+k+'\')">'+k+'</button>').join('')+'</div>':'';
+  let keys=q.k?'<div class="qkeys">'+q.k.map(k=>'<button onclick="insKey(this,\''+k+'\')">'+k+'</button>').join('')+'</div>':'';
+  if(!keys){if(q.t==='frac')keys='<div class="qkeys"><button onclick="insKey(this,\'-\')">−</button><button onclick="insKey(this,\'/\')">/</button></div>';else if(q.t==='num')keys='<div class="qkeys"><button onclick="insKey(this,\'-\')">−</button></div>';else if(q.t==='rem')keys='<div class="qkeys"><button onclick="insKey(this,\'余\')">余</button></div>';else if(q.t==='pct')keys='<div class="qkeys"><button onclick="insKey(this,\'%\')">%</button></div>'}
   const hint=q.h?'<div class="qhint">✍️ '+q.h+'</div>':'';
-  return '<div class="qcard" id="qc'+i+'"><div class="qtop"><div class="qnum">'+(i+1)+'</div><div class="qtext">'+q.q+'</div></div><div class="ans-row"><input id="qi'+i+'" '+im+' autocomplete="off" onkeydown="keyNav(event,'+i+')">'+keys+'</div>'+hint+'<div class="qmark" id="qm'+i+'" hidden></div></div>'
+  return '<div class="qcard" id="qc'+i+'"><div class="qtop"><div class="qnum">'+(i+1)+'</div><div class="qtext">'+q.q+'</div></div><div class="ans-row"><input id="qi'+i+'" '+im+' autocomplete="off" onkeydown="keyNav(event,'+i+')" oninput="if(S.cfg.instant)liveCheck('+i+')">'+keys+'</div>'+hint+'<div class="qmark" id="qm'+i+'" hidden></div></div>'
  }).join('');
  setTimeout(()=>{const f=$('qi0');if(f)f.focus()},60);
 }
@@ -495,6 +539,25 @@ function keyNav(e,i){
  e.preventDefault();
  const next=$('qi'+(i+1));
  if(next)next.focus();else submitPractice();
+}
+function liveCheck(i){
+ const q=SS.qs[i],inp=$('qi'+i);
+ if(!inp)return;
+ if(String(inp.value).trim()===''){inp.classList.remove('right','wrong');return}
+ const ok=checkAnswer(q,inp.value);
+ inp.classList.toggle('right',ok);inp.classList.toggle('wrong',!ok);
+ if(S.cfg.sound)beep(ok?720:200,ok?0.07:0.12,ok?'sine':'square');
+}
+let _ac=null;
+function beep(freq,dur,type){
+ try{
+  if(!_ac)_ac=new (window.AudioContext||window.webkitAudioContext)();
+  if(_ac.state==='suspended')_ac.resume();
+  const o=_ac.createOscillator(),g=_ac.createGain();
+  o.type=type||'sine';o.frequency.value=freq;o.connect(g);g.connect(_ac.destination);
+  g.gain.setValueAtTime(0.05,_ac.currentTime);
+  o.start();o.stop(_ac.currentTime+dur);
+ }catch(e){}
 }
 function evalFracStr(s){const m=String(s).match(/^(-?\d+)\/(\d+)$/);return m?(+m[1]/+m[2]):parseFloat(s)}
 function normInput(s){
@@ -550,6 +613,7 @@ function submitPractice(){
  const pr=acc===100?'🌟 全对！计算小达人':(acc>=80?'👍 很棒，继续保持':'💪 错题别灰心，重练一遍');
  $('result-card').innerHTML='<div class="score">'+correct+' / '+total+'</div><div class="rmeta">正确率 '+acc+'% · 用时 '+Math.floor(sec/60)+'分'+(sec%60)+'秒 · '+SS.gn+'</div><div class="praise">'+pr+'</div>';
  $('result-panel').hidden=false;
+ if(S.cfg.sound){if(acc===100){beep(880,0.12);setTimeout(()=>beep(1180,0.14),120)}else if(acc>=80)beep(660,0.12);else beep(380,0.14)}
  recordSession({g:SS.g,gn:SS.gn,tps:SS.tps,n:total,c:correct,sec,mode:'online'});
  if(SS.wrongRedo){
   SS.qs.forEach((q,i)=>{
@@ -652,7 +716,7 @@ function renderWrong(){
  $('btn-redo-all').hidden=!list.length;
  if(!list.length){$('w-list').innerHTML='<div class="empty">🎉 错题本空空如也，继续保持！</div>';return}
  $('w-list').innerHTML=list.map(w=>{
-  const ua=String(w.ua).trim()?('<span class="ua">'+w.ua+'</span>'):'<span style="color:#C4B5AA">纸质练习错题</span>';
+  const ua=String(w.ua).trim()?('<span class="ua">'+esc(w.ua)+'</span>'):'<span style="color:#C4B5AA">纸质练习错题</span>';
   return '<div class="wcard"><div class="wq">'+w.q+'</div><div class="wmeta">'+w.gn+' · '+w.tp+' ｜ 你的答案：'+ua+' ｜ 正确答案：<span class="ra">'+w.a+'</span> ｜ 错 '+w.wc+' 次 · '+w.ld+'</div><div class="wops"><button class="btn sm ghost" onclick="removeWrong(\''+w.id+'\')">已掌握，移除</button></div></div>'
  }).join('');
 }
@@ -664,6 +728,79 @@ function redoAllWrong(){
  SS={g:list[0].g,gn:list[0].gn,tps:['错题重练'],qs:list.map(w=>({q:w.q,a:w.a,t:w.t,h:w.h,k:w.k,tp:w.tp})),start:Date.now(),mode:'online',submitted:false,wrongRedo:true};
  renderPractice();startTimer();show('scr-practice');
  toast('重练中答对会自动移出错题本');
+}
+
+/* ============ 家长周报 / 关于 / 备份 ============ */
+function goReport(){renderReport();show('scr-report')}
+function renderReport(){
+ const days=14,arr=[];
+ for(let i=days-1;i>=0;i--){
+  const d=new Date(Date.now()-i*864e5);
+  const ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const hs=S.hist.filter(h=>h.d===ds);
+  const n=hs.reduce((s,h)=>s+h.n,0),c=hs.reduce((s,h)=>s+h.c,0);
+  arr.push({ds,n,t:hs.length?Math.round(c/n*100):0});
+ }
+ const maxN=Math.max(1,...arr.map(a=>a.n));
+ const bars=arr.map(a=>'<div class="rp-bar"><div class="col'+(a.n?'':' zero')+'" style="height:'+Math.max(4,Math.round(a.n/maxN*96))+'px"></div><div class="d">'+a.ds.slice(5)+'</div></div>').join('');
+ const totalN=S.hist.reduce((s,h)=>s+h.n,0),totalC=S.hist.reduce((s,h)=>s+h.c,0);
+ const acc=totalN?Math.round(totalC/totalN*100):0;
+ const topWrong=[...S.wrong].sort((a,b)=>(b.wc||1)-(a.wc||1)).slice(0,3).map(w=>w.gn+'·'+w.tp+'（错'+(w.wc||1)+'次）');
+ $('rp-body').innerHTML=
+  '<div class="card"><div style="display:flex;justify-content:space-around;text-align:center"><div><div style="font-size:20px;font-weight:800;color:var(--main)">'+totalN+'</div><div style="font-size:11px;color:var(--sub)">累计题数</div></div><div><div style="font-size:20px;font-weight:800;color:var(--main)">'+acc+'%</div><div style="font-size:11px;color:var(--sub)">总正确率</div></div><div><div style="font-size:20px;font-weight:800;color:var(--main)">'+S.wrong.length+'</div><div style="font-size:11px;color:var(--sub)">待消灭错题</div></div></div></div>'+
+  '<div class="card"><div style="font-size:13px;font-weight:700;color:var(--sub);margin-bottom:10px">近 14 天每日题数</div><div class="rp-bar-wrap">'+bars+'</div></div>'+
+  (topWrong.length?'<div class="card"><div style="font-size:13px;font-weight:700;color:var(--sub);margin-bottom:8px">最常错的专题</div>'+topWrong.map(t=>'<div class="ab-list"><span class="dot"></span>'+t+'</div>').join('')+'</div>':'')+
+  '<div class="note">数据仅保存在本机浏览器，换设备或清缓存会丢失，建议定期用首页"导出备份"。</div>';
+}
+function goAbout(){renderAbout();show('scr-about')}
+function renderAbout(){
+ $('ab-body').innerHTML='<div style="font-size:15px;line-height:1.9"><p><b>每日计算·天天练（北师大版）</b></p><p style="color:var(--sub)">按北师大版教材进度出题，不超前。小一～初二，覆盖课内计算全模块。</p><p style="margin-top:10px" class="ab-list"><span class="dot"></span>数据仅保存在本机浏览器</p><p class="ab-list"><span class="dot"></span>支持导出 / 导入备份、家长周报</p><p class="ab-list"><span class="dot"></span>错题自动收集、重练即清除</p><div style="margin-top:14px;padding:12px 14px;background:#FFF6EF;border:1px solid #F3D9C2;border-radius:14px"><div style="font-weight:600;margin-bottom:8px">👤 作者联系方式</div><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div><div style="color:var(--sub);font-size:13px">微信</div><div style="font-size:16px;font-weight:600;letter-spacing:.5px">scverygood</div></div><button class="btn sm" onclick="copyWx()">复制微信号</button></div><div style="color:var(--sub);font-size:12px;margin-top:8px">有问题或想要定制，加微信备注「计算练习」即可。</div></div><p style="margin-top:12px;color:var(--sub);font-size:13px">版本 v1.1 ｜ 欢迎转发给需要的家长朋友～</p></div>';
+}
+function copyWx(){
+ const wx='scverygood';
+ const done=()=>toast('已复制：'+wx);
+ if(navigator.clipboard&&navigator.clipboard.writeText){
+  navigator.clipboard.writeText(wx).then(done).catch(()=>fallbackCopy(wx,done));
+ }else fallbackCopy(wx,done);
+}
+function fallbackCopy(t,done){
+ try{
+  const ta=document.createElement('textarea');
+  ta.value=t;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();
+  document.execCommand('copy');ta.remove();done();
+ }catch(e){toast('复制失败，请手动复制：'+t)}
+}
+function exportData(){
+ try{
+  const data=JSON.stringify(S);
+  const blob=new Blob([data],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='每日计算备份_'+todayStr()+'.json';
+  document.body.appendChild(a);a.click();a.remove();
+  URL.revokeObjectURL(a.href);
+  toast('已导出备份文件');
+ }catch(e){toast('导出失败')}
+}
+function importData(){
+ const inp=document.createElement('input');
+ inp.type='file';inp.accept='application/json';
+ inp.onchange=()=>{
+  const f=inp.files&&inp.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{
+   try{
+    const d=JSON.parse(r.result);
+    if(!d||!Array.isArray(d.hist)||!Array.isArray(d.wrong)){toast('文件格式不正确');return}
+    if(!confirm('导入将覆盖当前本机数据，确定吗？'))return;
+    S=Object.assign({hist:[],wrong:[],streak:{last:'',n:0},last:null,cfg:{n:8,mode:'online',instant:false,sound:true}},d);
+    save();renderHome();toast('备份已导入');
+   }catch(e){toast('解析失败')}
+  };
+  r.readAsText(f);
+ };
+ inp.click();
 }
 
 /* ============ 启动 ============ */
