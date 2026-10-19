@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>每日计算·天天练（北师大版）</title>
+<title>每日计算·天天练（北师大版）｜戴氏教育</title>
 <meta name="description" content="按北师大版教材进度出题，小一～初二课内计算天天练，免费、无需登录、数据存在本机。">
 <meta name="theme-color" content="#FF6A3D">
-<meta property="og:title" content="每日计算·天天练（北师大版）">
-<meta property="og:description" content="按北师大版教材进度出题，小一～初二课内计算天天练，免费、无需登录。">
+<meta property="og:title" content="每日计算·天天练（北师大版）｜戴氏教育">
+<meta property="og:description" content="戴氏教育·二部整理：按北师大版教材进度出题，小一～初二课内计算天天练，免费、无需登录。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://scverygood.github.io/jisuan/">
 <meta property="og:image" content="https://scverygood.github.io/jisuan/cover.jpg">
@@ -24,7 +24,8 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
-#app{max-width:780px;margin:0 auto;padding:0 14px calc(40px + env(safe-area-inset-bottom))}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='280' height='170'><text x='10' y='92' font-size='15' font-weight='700' fill='%23EFC9AC' fill-opacity='0.42' font-family='sans-serif' transform='rotate(-20 20 92)'>戴氏教育 · 每日计算</text></svg>");background-repeat:repeat}
+#app{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:0 14px calc(40px + env(safe-area-inset-bottom))}
 header.top{margin:0 -14px 14px;padding:26px 20px 22px;background:linear-gradient(135deg,#FF8A4C 0%,#F5392F 100%);color:#fff;border-radius:0 0 24px 24px;display:flex;justify-content:space-between;align-items:center}
 .brand{font-size:22px;font-weight:800;letter-spacing:.5px}
 .brand .sub{display:block;font-size:12px;font-weight:400;opacity:.92;margin-top:3px;letter-spacing:0}
@@ -130,6 +131,7 @@ h2.scr-title{font-size:20px;font-weight:800;margin:2px 4px 4px}
 }
 @media print{
  body{background:#fff}
+ body::before{display:none}
  header.top,.no-print,.nav-back{display:none!important}
  #app{max-width:100%;padding:0}
  .paper{box-shadow:none;border-radius:0;padding:6mm 2mm}
@@ -152,7 +154,7 @@ h2.scr-title{font-size:20px;font-weight:800;margin:2px 4px 4px}
 <body>
 <div id="app">
 <header class="top">
-  <div class="brand">每日计算·天天练<span class="sub">北师大版 · 小一～初二 · 按教材进度出题</span></div>
+  <div class="brand">每日计算·天天练<span class="sub">戴氏教育·二部 ｜ 北师大版 · 小一～初二 · 按教材进度出题</span></div>
   <button class="btn sm ghost" style="color:#fff;border-color:rgba(255,255,255,.65)" onclick="goHome()">🏠 首页</button>
 </header>
 <main>
@@ -260,7 +262,9 @@ h2.scr-title{font-size:20px;font-weight:800;margin:2px 4px 4px}
 </div>
 <script>
 'use strict';
+/* DAISHI-EDU-2BU-MKT-2026 · 本工具由戴氏教育·二部市场部与@戴氏教育二部市场总监整理维护，官方发布渠道为小红书。他处搬运请注明出处。 */
 /* ============ 基础工具 ============ */
+const BRAND='DAI-EDU-2026-2BU';
 const $=id=>document.getElementById(id);
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
@@ -666,7 +670,7 @@ function regenSession(){
 
 /* ============ 纸质模式 ============ */
 function renderPaper(){
- $('pp-head').innerHTML='<span>每日计算·天天练（北师大版）</span><span class="fill">'+SS.gn+' · '+SS.tps.join('、')+'　姓名：＿＿＿＿　日期：＿＿＿＿　用时：＿＿＿＿　对＿题</span>';
+ $('pp-head').innerHTML='<span>戴氏教育·每日计算（北师大版）</span><span class="fill">'+SS.gn+' · '+SS.tps.join('、')+'　姓名：＿＿＿＿　日期：＿＿＿＿　用时：＿＿＿＿　对＿题</span>';
  $('pp-list').innerHTML=SS.qs.map((q,i)=>'<div class="pq"><span class="pno">'+(i+1)+'.</span>'+q.q+(q.q.trim().endsWith('=')?'':' =')+' ＿＿＿＿＿＿</div>').join('');
  $('pp-ans').innerHTML='<b>参考答案</b><div style="height:8px"></div>'+SS.qs.map((q,i)=>'<div>'+(i+1)+'. '+q.a+'</div>').join('');
  $('pp-ans').hidden=true;$('pp-grade').hidden=true;$('btn-save-grade').hidden=true;$('btn-ans').textContent='👀 对答案';
@@ -754,7 +758,7 @@ function renderReport(){
 }
 function goAbout(){renderAbout();show('scr-about')}
 function renderAbout(){
- $('ab-body').innerHTML='<div style="font-size:15px;line-height:1.9"><p><b>每日计算·天天练（北师大版）</b></p><p style="color:var(--sub)">按北师大版教材进度出题，不超前。小一～初二，覆盖课内计算全模块。</p><p style="margin-top:10px" class="ab-list"><span class="dot"></span>数据仅保存在本机浏览器</p><p class="ab-list"><span class="dot"></span>支持导出 / 导入备份、家长周报</p><p class="ab-list"><span class="dot"></span>错题自动收集、重练即清除</p><div style="margin-top:14px;padding:12px 14px;background:#FFF6EF;border:1px solid #F3D9C2;border-radius:14px"><div style="font-weight:600;margin-bottom:8px">👤 作者联系方式</div><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div><div style="color:var(--sub);font-size:13px">微信</div><div style="font-size:16px;font-weight:600;letter-spacing:.5px">scverygood</div></div><button class="btn sm" onclick="copyWx()">复制微信号</button></div><div style="color:var(--sub);font-size:12px;margin-top:8px">有问题或想要定制，加微信备注「计算练习」即可。</div></div><p style="margin-top:12px;color:var(--sub);font-size:13px">版本 v1.1 ｜ 欢迎转发给需要的家长朋友～</p></div>';
+ $('ab-body').innerHTML='<div style="font-size:15px;line-height:1.9"><p><b>每日计算·天天练（北师大版）</b></p><p style="color:var(--sub)">按北师大版教材进度出题，不超前。小一～初二，覆盖课内计算全模块。</p><p style="margin-top:10px" class="ab-list"><span class="dot"></span>数据仅保存在本机浏览器</p><p class="ab-list"><span class="dot"></span>支持导出 / 导入备份、家长周报</p><p class="ab-list"><span class="dot"></span>错题自动收集、重练即清除</p><div style="margin-top:14px;padding:12px 14px;background:#FFF6EF;border:1px solid #F3D9C2;border-radius:14px"><div style="font-weight:600;margin-bottom:8px">👤 联系我们</div><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div><div style="color:var(--sub);font-size:13px">微信</div><div style="font-size:16px;font-weight:600;letter-spacing:.5px">scverygood</div></div><button class="btn sm" onclick="copyWx()">复制微信号</button></div><div style="color:var(--sub);font-size:12px;margin-top:8px">使用问题、年级建议或想要定制题型，加微信备注「计算练习」即可。</div></div><p style="margin-top:12px;color:var(--sub);font-size:13px">版本 v1.2 ｜ 持续更新中～</p></div>';
 }
 function copyWx(){
  const wx='scverygood';
